@@ -1,0 +1,31 @@
+import { Bell, Search } from 'lucide-react';
+import './Header.css';
+
+export default function Header() {
+  return (
+    <header className="main-header">
+      <div className="header-greeting desktop-hide">
+        <h2 className="greeting-text">Good morning, Alx</h2>
+        <p className="greeting-sub">Let's check on your projects</p>
+      </div>
+
+      <div className="header-search mobile-hide">
+        <div className="search-bar">
+          <Search size={20} className="search-icon" />
+          <input type="text" placeholder="Search projects, tasks, or personnel..." />
+          <span className="search-shortcut">⌘K</span>
+        </div>
+      </div>
+
+      <div className="header-actions">
+        <button className="btn-icon header-btn relative">
+          <Bell size={22} />
+          <span className="notification-dot"></span>
+        </button>
+        <button className="btn btn-primary try-ai-btn">
+          ✨ Try AI
+        </button>
+      </div>
+    </header>
+  );
+}

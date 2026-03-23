@@ -1,0 +1,138 @@
+.schedule-wrapper {
+  padding-bottom: 24px;
+}
+
+.schedule-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 1024px) {
+  .schedule-layout {
+    grid-template-columns: 1fr 350px;
+    align-items: start;
+  }
+}
+
+.bg-brand-tertiary { background: var(--brand-tertiary); }
+.text-brand { color: var(--brand-primary); }
+.text-success { color: var(--status-success); }
+.shadow-brand { box-shadow: 0 4px 12px rgba(255,106,61,0.3); }
+
+/* Timeline */
+.timeline-container {
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+  border-left: 2px dashed var(--border-color);
+  margin-left: 80px;
+}
+
+@media (max-width: 768px) {
+  .timeline-container {
+    margin-left: 0;
+    padding-left: 16px;
+    padding-top: 20px;
+  }
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 32px;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-time {
+  position: absolute;
+  left: -100px;
+  top: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  width: 70px;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .timeline-time {
+    position: relative;
+    left: 0;
+    top: 0;
+    text-align: left;
+    margin-bottom: 8px;
+    color: var(--brand-primary);
+  }
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -27px; /* -20px padding - 7px half width + 1 dashed border offset */
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: 4px solid var(--border-color);
+}
+
+@media (max-width: 768px) {
+  .timeline-dot {
+    left: -23px;
+  }
+}
+
+.timeline-dot.completed {
+  border-color: var(--status-success);
+  background: var(--status-success);
+}
+
+.timeline-dot.in-progress {
+  border-color: var(--brand-primary);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(255,106,61,0.2);
+}
+
+.timeline-dot.pending {
+  border-color: var(--border-color);
+}
+
+.timeline-content {
+  padding: 16px 20px;
+  background: var(--bg-tertiary);
+  border: none;
+  box-shadow: none;
+}
+
+.text-\[15px\] { font-size: 15px; }
+
+/* Automation Feed */
+.automation-card {
+  background: linear-gradient(180deg, var(--bg-secondary) 0%, rgba(255, 106, 61, 0.03) 100%);
+}
+
+.feed-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.feed-item {
+  display: flex;
+  gap: 12px;
+}
+
+.feed-icon {
+  margin-top: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}

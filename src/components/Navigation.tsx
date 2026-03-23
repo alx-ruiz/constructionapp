@@ -1,0 +1,65 @@
+import { NavLink } from 'react-router-dom';
+import { Home, FolderKanban, Wallet, CalendarRange, Settings, ClipboardList, Users } from 'lucide-react';
+import './Navigation.css';
+
+export default function Navigation() {
+  const navItems = [
+    { name: 'Dashboard', path: '/', icon: Home },
+    { name: 'Projects', path: '/projects', icon: FolderKanban },
+    { name: 'Budget', path: '/budget', icon: Wallet },
+    { name: 'Schedule', path: '/schedule', icon: CalendarRange },
+    { name: 'Logs', path: '/logs', icon: ClipboardList },
+    { name: 'Client View', path: '/client', icon: Users },
+    { name: 'Settings', path: '/settings', icon: Settings, desktopOnly: true },
+  ];
+
+  return (
+    <nav className="main-nav">
+      <div className="nav-brand desktop-hide-brand">
+        <div className="brand-logo">
+          <div className="brand-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+          <span className="brand-text">BuildCommand</span>
+        </div>
+      </div>
+      
+      <ul className="nav-list">
+        {navItems.map((item) => {
+          if (item.desktopOnly) {
+            return (
+              <li key={item.name} className="nav-item mobile-hide">
+                <NavLink to={item.path} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                  <item.icon className="nav-icon" size={24} />
+                  <span className="nav-label">{item.name}</span>
+                </NavLink>
+              </li>
+            );
+          }
+          return (
+            <li key={item.name} className="nav-item">
+              <NavLink to={item.path} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                <item.icon className="nav-icon" size={24} />
+                <span className="nav-label">{item.name}</span>
+              </NavLink>
+            </li>
+          );
+        })}
+      </ul>
+      
+      <div className="nav-footer mobile-hide">
+        <div className="user-profile-mini">
+          <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="User Avatar" className="avatar" />
+          <div className="user-info">
+            <span className="user-name">Alx Builder</span>
+            <span className="user-role">Owner</span>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+}

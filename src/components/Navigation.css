@@ -1,0 +1,209 @@
+/* Navigation styling - Mobile First */
+.main-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-height);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--glass-border);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.desktop-hide-brand {
+  display: none;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.nav-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--text-secondary);
+  padding: 8px 12px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-icon {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-label {
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.nav-link.active {
+  color: var(--brand-primary);
+}
+
+.nav-link.active .nav-icon {
+  transform: translateY(-2px);
+}
+
+.nav-link.active .nav-label {
+  opacity: 1;
+  font-weight: 600;
+}
+
+/* active indicator dot */
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  top: 0px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--brand-primary);
+  box-shadow: 0 0 8px var(--brand-primary);
+}
+
+.nav-footer {
+  display: none;
+}
+
+
+/* Desktop View */
+@media (min-width: 768px) {
+  .main-nav {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: auto;
+    width: 280px;
+    height: 100vh;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    border-top: none;
+    border-right: 1px solid var(--border-color);
+    padding: 32px 24px;
+    background: var(--bg-secondary);
+  }
+
+  .desktop-hide-brand {
+    display: flex;
+    margin-bottom: 48px;
+  }
+
+  .brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--brand-primary), #FF3D71);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 4px 12px rgba(255, 106, 61, 0.3);
+  }
+
+  .brand-text {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+  }
+
+  .nav-list {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .nav-link {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 14px 20px;
+    border-radius: 16px;
+  }
+
+  .nav-label {
+    font-size: 15px;
+    font-size: 16px;
+  }
+
+  .nav-link.active {
+    background: var(--brand-tertiary);
+  }
+
+  .nav-link.active::after {
+    display: none; /* remove dot on desktop */
+  }
+
+  .nav-link.active .nav-icon {
+    transform: none;
+  }
+
+  .nav-footer {
+    display: flex;
+    margin-top: auto;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .user-profile-mini {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 8px;
+    border-radius: 16px;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+  
+  .user-profile-mini:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    object-fit: cover;
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .user-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .user-role {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+}
