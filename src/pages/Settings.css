@@ -1,0 +1,34 @@
+.settings-wrapper {
+  padding-bottom: 24px;
+}
+
+.settings-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 1024px) {
+  .settings-layout {
+    grid-template-columns: 1fr 1.2fr;
+    align-items: start;
+  }
+}
+
+.upload-zone {
+  border-color: var(--border-color);
+}
+
+.upload-zone:hover {
+  border-color: var(--brand-primary);
+  background-color: var(--brand-tertiary);
+}
+
+.theme-btn {
+  color: var(--text-primary);
+}
+
+.color-swatch-btn {
+  border: none;
+  cursor: pointer;
+}
