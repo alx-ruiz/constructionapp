@@ -1,0 +1,312 @@
+.crew-wrapper {
+  padding-bottom: 24px;
+}
+
+/* Stats Row */
+.crew-stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .crew-stats-row {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.crew-stat-card {
+  text-align: center;
+  padding: 20px 16px;
+}
+
+.stat-number {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 4px;
+}
+
+.stat-desc {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Chips */
+.btn-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-chip:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.btn-chip-brand {
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
+}
+
+.btn-chip-brand:hover {
+  background: var(--brand-tertiary);
+}
+
+.trade-input {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  width: 160px;
+  transition: border-color 0.2s;
+}
+
+.trade-input:focus {
+  border-color: var(--brand-primary);
+}
+
+/* Trade Accordion */
+.trade-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 20px;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.trade-header:hover {
+  background: var(--bg-tertiary);
+}
+
+.trade-name {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.trade-members {
+  border-top: 1px solid var(--border-color);
+}
+
+/* Crew Card */
+.crew-card {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+  transition: background 0.15s;
+}
+
+.crew-card:last-child {
+  border-bottom: none;
+}
+
+.crew-card:hover {
+  background: var(--bg-tertiary);
+}
+
+.crew-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+/* Avatar with status dot */
+.crew-avatar {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.crew-avatar img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-color);
+}
+
+.status-dot {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-secondary);
+}
+
+.status-dot.success { background: var(--status-success); }
+.status-dot.warning { background: var(--status-warning); }
+.status-dot.danger { background: var(--status-danger); }
+
+/* Info block */
+.crew-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.crew-name {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.crew-company {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.crew-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.crew-rate {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Quick Action Circles */
+.crew-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.action-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  color: white;
+}
+
+.action-circle.call {
+  background: #10b981;
+}
+
+.action-circle.call:hover {
+  background: #059669;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.action-circle.text {
+  background: #3b82f6;
+}
+
+.action-circle.text:hover {
+  background: #2563eb;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.action-circle.email {
+  background: #8b5cf6;
+}
+
+.action-circle.email:hover {
+  background: #7c3aed;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+}
+
+.action-circle.more {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.action-circle.more:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* Contact Details */
+.crew-details {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+  padding-left: 62px;
+  flex-wrap: wrap;
+}
+
+.detail-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.detail-link:hover {
+  color: var(--brand-primary);
+}
+
+/* Notes */
+.crew-notes {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  padding-left: 62px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* Responsive: stack actions under avatar on mobile */
+@media (max-width: 640px) {
+  .crew-card-top {
+    flex-wrap: wrap;
+  }
+  .crew-actions {
+    width: 100%;
+    margin-top: 8px;
+    padding-left: 62px;
+  }
+  .crew-details, .crew-notes {
+    padding-left: 0;
+  }
+}
