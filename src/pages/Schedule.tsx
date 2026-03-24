@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Clock, MapPin, Bell, UserCheck, Smartphone, CheckCircle2, Plus, X } from 'lucide-react';
+import { Clock, MapPin, Bell, UserCheck, Smartphone, CheckCircle2, Plus } from 'lucide-react';
 import Modal from '../components/Modal';
 import { showToast } from '../components/Toast';
 import { getSchedule, addScheduleItem, updateScheduleItem, getProjects, getNotifications } from '../data/dataStore';
