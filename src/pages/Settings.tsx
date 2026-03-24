@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { UploadCloud, Sun, Moon, Palette, Check } from 'lucide-react';
+import { showToast } from '../components/Toast';
+import { getCompanyName, setCompanyName, getCompanyLogo, setCompanyLogo } from '../data/dataStore';
 import './Settings.css';
 
 const THEMES = [
@@ -18,6 +20,9 @@ const BRAND_COLORS = [
 export default function Settings() {
   const [theme, setTheme] = useState(() => localStorage.getItem('app-theme') || 'light');
   const [brandColor, setBrandColor] = useState(() => localStorage.getItem('app-brand-color') || '#FF6A3D');
+  const [companyNameVal, setCompanyNameVal] = useState(getCompanyName);
+  const [logoPreview, setLogoPreview] = useState(getCompanyLogo);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Apply theme to DOM
   useEffect(() => {
@@ -30,6 +35,27 @@ export default function Settings() {
     document.documentElement.style.setProperty('--brand-primary', brandColor);
     localStorage.setItem('app-brand-color', brandColor);
   }, [brandColor]);
+
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      showToast('File too large. Max 2MB.', 'error');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64 = reader.result as string;
+      setLogoPreview(base64);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleSaveProfile = () => {
+    setCompanyName(companyNameVal);
+    if (logoPreview) setCompanyLogo(logoPreview);
+    showToast('Company profile saved!');
+  };
 
   return (
     <div className="settings-wrapper animate-fade-in">
@@ -48,19 +74,29 @@ export default function Settings() {
           <div className="flex flex-col gap-6">
             <div className="log-input-group">
                <label>Company Name</label>
-               <input type="text" defaultValue="Alx Residential Builders" />
+               <input type="text" value={companyNameVal} onChange={e => setCompanyNameVal(e.target.value)} />
             </div>
             
             <div className="log-input-group">
                <label>Company Logo</label>
-               <div className="upload-zone flex flex-col items-center justify-center p-8 border-2 border-dashed border-color rounded-2xl bg-bg-tertiary cursor-pointer hover:border-brand-primary transition-colors">
-                  <UploadCloud size={32} className="text-secondary mb-2" />
-                  <span className="font-semibold text-sm">Click or drag logo here</span>
-                  <span className="text-xs text-secondary mt-1">SVG, PNG, JPG (max. 2MB)</span>
+               <input type="file" ref={fileInputRef} accept="image/svg+xml,image/png,image/jpeg" onChange={handleLogoUpload} style={{ display: 'none' }} />
+               <div 
+                 className="upload-zone flex flex-col items-center justify-center p-8 border-2 border-dashed border-color rounded-2xl bg-bg-tertiary cursor-pointer hover:border-brand-primary transition-colors"
+                 onClick={() => fileInputRef.current?.click()}
+               >
+                  {logoPreview ? (
+                    <img src={logoPreview} alt="Company Logo" style={{ maxHeight: '80px', maxWidth: '200px', objectFit: 'contain' }} />
+                  ) : (
+                    <>
+                      <UploadCloud size={32} className="text-secondary mb-2" />
+                      <span className="font-semibold text-sm">Click or drag logo here</span>
+                      <span className="text-xs text-secondary mt-1">SVG, PNG, JPG (max. 2MB)</span>
+                    </>
+                  )}
                </div>
             </div>
             
-            <button className="btn btn-primary w-full justify-center">Save Profile Details</button>
+            <button className="btn btn-primary w-full justify-center" onClick={handleSaveProfile}>Save Profile Details</button>
           </div>
         </div>
 
