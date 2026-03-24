@@ -71,6 +71,26 @@ export interface Notification {
   createdAt: string;
 }
 
+export interface CrewMember {
+  id: string;
+  name: string;
+  trade: string;
+  company: string;
+  phone: string;
+  email: string;
+  rate: string;
+  status: 'Available' | 'On a Job' | 'Unavailable';
+  notes: string;
+  favorite: boolean;
+  createdAt: string;
+}
+
+export const DEFAULT_TRADES = [
+  'Framing', 'Electrical', 'Plumbing', 'Concrete', 'Painting',
+  'Roofing', 'HVAC', 'Drywall', 'Flooring', 'Landscaping',
+  'Cleaning', 'General Labor', 'Demolition', 'Masonry', 'Insulation'
+];
+
 // ─── Keys ───
 const KEYS = {
   projects: 'bc-projects',
@@ -80,6 +100,8 @@ const KEYS = {
   actions: 'bc-action-items',
   approvals: 'bc-approvals',
   notifications: 'bc-notifications',
+  crew: 'bc-crew',
+  customTrades: 'bc-custom-trades',
   companyName: 'bc-company-name',
   companyLogo: 'bc-company-logo',
   seeded: 'bc-seeded',
@@ -211,6 +233,32 @@ export const markAllNotificationsRead = () => {
   setAll(KEYS.notifications, all);
 };
 
+// ─── Crew ───
+export const getCrew = () => getAll<CrewMember>(KEYS.crew);
+export const addCrewMember = (m: Omit<CrewMember, 'id' | 'createdAt'>) => {
+  const all = getCrew();
+  const newM: CrewMember = { ...m, id: uid(), createdAt: new Date().toISOString() };
+  all.unshift(newM);
+  setAll(KEYS.crew, all);
+  addNotification({ text: `Added ${newM.name} (${newM.trade}) to crew.`, type: 'success' });
+  return newM;
+};
+export const updateCrewMember = (id: string, updates: Partial<CrewMember>) => {
+  const all = getCrew().map(m => m.id === id ? { ...m, ...updates } : m);
+  setAll(KEYS.crew, all);
+};
+export const deleteCrewMember = (id: string) => {
+  setAll(KEYS.crew, getCrew().filter(m => m.id !== id));
+};
+export const getCustomTrades = (): string[] => {
+  try { return JSON.parse(localStorage.getItem(KEYS.customTrades) || '[]'); }
+  catch { return []; }
+};
+export const addCustomTrade = (trade: string) => {
+  const all = getCustomTrades();
+  if (!all.includes(trade)) { all.push(trade); localStorage.setItem(KEYS.customTrades, JSON.stringify(all)); }
+};
+
 // ─── Company Settings ───
 export const getCompanyName = () => localStorage.getItem(KEYS.companyName) || 'Alx Residential Builders';
 export const setCompanyName = (name: string) => localStorage.setItem(KEYS.companyName, name);
@@ -282,5 +330,18 @@ export function seedIfNeeded(): void {
   setAll(KEYS.actions, actions);
   setAll(KEYS.approvals, approvals);
   setAll(KEYS.notifications, notifications);
+
+  const crew: CrewMember[] = [
+    { id: 'c1', name: 'Marco Rivera', trade: 'Framing', company: 'Rivera Framing Co.', phone: '(512) 555-0142', email: 'marco@riveraframing.com', rate: '$45/hr', status: 'On a Job', notes: 'Reliable, 10+ years experience. Licensed & insured.', favorite: true, createdAt: '2025-06-01T00:00:00Z' },
+    { id: 'c2', name: 'Jake "Sparky" Chen', trade: 'Electrical', company: 'Sparky Bros Electric', phone: '(512) 555-0198', email: 'jake@sparkybros.com', rate: '$65/hr', status: 'Available', notes: 'Master electrician. Great with rough-ins.', favorite: true, createdAt: '2025-07-15T00:00:00Z' },
+    { id: 'c3', name: 'Luis Hernandez', trade: 'Plumbing', company: 'LH Plumbing Solutions', phone: '(512) 555-0233', email: 'luis@lhplumbing.com', rate: '$55/hr', status: 'Available', notes: 'Handles commercial and residential.', favorite: false, createdAt: '2025-08-20T00:00:00Z' },
+    { id: 'c4', name: 'Tony Moretti', trade: 'Concrete', company: 'Moretti Concrete Inc.', phone: '(512) 555-0301', email: 'tony@moretticoncrete.com', rate: '$3,500/job', status: 'On a Job', notes: 'Specializes in foundations and flatwork.', favorite: false, createdAt: '2025-09-10T00:00:00Z' },
+    { id: 'c5', name: 'Sarah Park', trade: 'Painting', company: 'Park & Finish Painting', phone: '(512) 555-0417', email: 'sarah@parkfinish.com', rate: '$35/hr', status: 'Available', notes: 'Interior and exterior. Excellent finishes.', favorite: true, createdAt: '2025-10-05T00:00:00Z' },
+    { id: 'c6', name: 'Dave Wilson', trade: 'Roofing', company: 'Wilson Roofing LLC', phone: '(512) 555-0522', email: 'dave@wilsonroofing.com', rate: '$5,000/job', status: 'Unavailable', notes: 'Booked until mid-November. Premium quality.', favorite: false, createdAt: '2025-11-01T00:00:00Z' },
+    { id: 'c7', name: 'Emily Watson', trade: 'Cleaning', company: 'BuildClean Pro', phone: '(512) 555-0634', email: 'emily@buildclean.com', rate: '$25/hr', status: 'Available', notes: 'Post-construction cleanup specialist.', favorite: false, createdAt: '2026-01-10T00:00:00Z' },
+    { id: 'c8', name: 'Carlos Mendez', trade: 'HVAC', company: 'AirFlow Systems', phone: '(512) 555-0718', email: 'carlos@airflowsys.com', rate: '$70/hr', status: 'On a Job', notes: 'Licensed HVAC tech. Handles mini-splits.', favorite: true, createdAt: '2026-02-15T00:00:00Z' },
+  ];
+
+  setAll(KEYS.crew, crew);
   localStorage.setItem(KEYS.seeded, 'true');
 }
