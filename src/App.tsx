@@ -10,9 +10,13 @@ import DailyLogs from './pages/DailyLogs';
 import ClientPortal from './pages/ClientPortal';
 import Settings from './pages/Settings';
 import AIChat from './components/AIChat';
+import ToastContainer from './components/Toast';
+import { seedIfNeeded } from './data/dataStore';
 
 function App() {
   useEffect(() => {
+    // Seed default data on first load
+    seedIfNeeded();
     // Initialize user preferences on app boot
     const savedTheme = localStorage.getItem('app-theme') || 'light';
     const savedColor = localStorage.getItem('app-brand-color') || '#FF6A3D';
@@ -33,6 +37,7 @@ function App() {
           <Route path="/settings" element={<Settings />} />
         </Routes>
         <AIChat />
+        <ToastContainer />
         <Analytics />
       </Layout>
     </BrowserRouter>
