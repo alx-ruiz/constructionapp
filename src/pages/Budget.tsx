@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, TrendingDown, Receipt, Camera, X, Trash2 } from 'lucide-react';
+import { Plus, TrendingDown, Receipt, Camera, Trash2 } from 'lucide-react';
 import Modal from '../components/Modal';
 import { showToast } from '../components/Toast';
 import { getExpenses, addExpense, deleteExpense, getProjects, formatCurrency } from '../data/dataStore';

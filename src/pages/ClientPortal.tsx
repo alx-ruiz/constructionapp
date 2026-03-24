@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Camera, CheckCircle2, CircleDashed, FileText, MessageSquare, AlertCircle, Send, X } from 'lucide-react';
+import { Camera, CheckCircle2, CircleDashed, FileText, MessageSquare, AlertCircle, Send } from 'lucide-react';
 import Modal from '../components/Modal';
 import { showToast } from '../components/Toast';
 import { getApprovals, updateApproval, getProjects, getDailyLogs } from '../data/dataStore';
@@ -54,7 +54,7 @@ export default function ClientPortal() {
   const photoUpdates = logs
     .filter(l => l.photos && l.photos.length > 0)
     .slice(0, 4)
-    .map((l, i) => ({ id: l.id, date: l.date, title: `Site Update - ${l.date}`, img: l.photos[0] }));
+    .map((l) => ({ id: l.id, date: l.date, title: `Site Update - ${l.date}`, img: l.photos[0] }));
 
   // Fallback placeholder photos if no log photos exist
   const displayPhotos = photoUpdates.length > 0 ? photoUpdates : [
