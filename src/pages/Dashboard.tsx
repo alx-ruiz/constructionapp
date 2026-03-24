@@ -106,18 +106,47 @@ export default function Dashboard() {
             <button className="btn-icon">•••</button>
           </div>
 
-          <div className="gauge-wrapper">
-             <svg viewBox="0 0 100 50" className="gauge-svg">
-                <path className="gauge-bg" d="M 10 50 A 40 40 0 0 1 90 50" fill="none" />
-                {/* Simulated segments */}
-                <path className="gauge-segment" d="M 10 50 A 40 40 0 0 1 20 25" fill="none" stroke="var(--brand-primary)" strokeDasharray="5 2" />
-                <path className="gauge-fill" strokeDasharray="125" strokeDashoffset="30" d="M 10 50 A 40 40 0 0 1 90 50" fill="none" />
-             </svg>
-             <div className="gauge-content">
-               <div className="gauge-value">96.5%</div>
-               <div className="gauge-label">Average Status</div>
-             </div>
-          </div>
+            <div className="relative h-32 w-full mt-4 flex items-center justify-center">
+              <svg viewBox="0 0 100 55" className="w-full h-full overflow-visible drop-shadow-xl">
+                 <defs>
+                   <linearGradient id="healthGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                     <stop offset="0%" stopColor="#ef4444" /> {/* Red */}
+                     <stop offset="30%" stopColor="#f59e0b" /> {/* Amber */}
+                     <stop offset="70%" stopColor="#10b981" /> {/* Emerald */}
+                     <stop offset="100%" stopColor="#3b82f6" /> {/* Blue */}
+                   </linearGradient>
+                   <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                     <feGaussianBlur stdDeviation="3" result="blur" />
+                     <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                   </filter>
+                 </defs>
+                 
+                 {/* Background Track */}
+                 <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="var(--bg-tertiary)" strokeWidth="8" strokeLinecap="round" />
+                 
+                 {/* Gradient Foreground (Length ~125.6, 96.5% filled = 4.4 offset) */}
+                 <path 
+                   d="M 10 50 A 40 40 0 0 1 90 50" 
+                   fill="none" 
+                   stroke="url(#healthGrad)" 
+                   strokeWidth="8" 
+                   strokeLinecap="round" 
+                   strokeDasharray="125.6" 
+                   strokeDashoffset="4.4" 
+                   filter="url(#glow)"
+                   className="gauge-progress animate-pulse-slow"
+                 />
+                 
+                 {/* Dial Markings */}
+                 <path d="M 10 50 L 14 50" stroke="var(--text-secondary)" strokeWidth="1.5" strokeLinecap="round" />
+                 <path d="M 50 10 L 50 14" stroke="var(--text-secondary)" strokeWidth="1.5" strokeLinecap="round" />
+                 <path d="M 90 50 L 86 50" stroke="var(--text-secondary)" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+              <div className="absolute bottom-4 flex flex-col items-center">
+                <span className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500" style={{ backgroundImage: 'linear-gradient(to right, #10b981, #3b82f6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>96.5%</span>
+                <span className="text-[10px] text-secondary font-bold uppercase tracking-wider mt-1">Average Status</span>
+              </div>
+            </div>
 
           <div className="indicator-list mt-8">
             <div className="indicator-item">

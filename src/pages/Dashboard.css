@@ -153,6 +153,31 @@
   box-shadow: 0 -4px 12px rgba(255,106,61,0.2);
 }
 
+.chart-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--bg-primary) transparent transparent transparent;
+}
+
+/* Beautiful Rainbow Gauge utilities */
+.drop-shadow-xl {
+  filter: drop-shadow(0 20px 20px rgba(16, 185, 129, 0.15)) drop-shadow(0 8px 10px rgba(59, 130, 246, 0.2));
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-slow {
+  0%, 100% { filter: drop-shadow(0 0 12px rgba(59, 130, 246, 0.4)); }
+  50% { filter: drop-shadow(0 0 24px rgba(16, 185, 129, 0.6)); }
+}
+
 .chart-tooltip {
   position: absolute;
   top: -40px;
