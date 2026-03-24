@@ -1,16 +1,69 @@
 import { useState } from 'react';
-import { Plus, TrendingDown, Receipt, Camera, X } from 'lucide-react';
+import { Plus, TrendingDown, Receipt, Camera, X, Trash2 } from 'lucide-react';
+import Modal from '../components/Modal';
+import { showToast } from '../components/Toast';
+import { getExpenses, addExpense, deleteExpense, getProjects, formatCurrency } from '../data/dataStore';
+import type { Expense } from '../data/dataStore';
 import './Budget.css';
 
-const EXPENSES = [
-  { id: 1, title: 'Lumber Supply - Home Depot', project: 'Modern Townhouse Dev', amount: '$4,250.00', date: 'Today, 10:30 AM', type: 'Material' },
-  { id: 2, title: 'Permit Renewal Fee', project: 'Downtown Loft', amount: '$350.00', date: 'Yesterday', type: 'Admin' },
-  { id: 3, title: 'Electrical Subcontractor Draw', project: 'Lakeside Cabins', amount: '$12,000.00', date: 'Oct 02, 2026', type: 'Labor' },
-  { id: 4, title: 'Concrete Pouring - Foundation', project: 'Suburban Extension', amount: '$3,800.00', date: 'Oct 01, 2026', type: 'Material' },
-];
+const EXPENSE_TYPES: Expense['type'][] = ['Material', 'Labor', 'Admin', 'Equipment', 'Other'];
 
 export default function Budget() {
+  const [expenses, setExpenses] = useState(getExpenses);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+
+  // Form state
+  const [form, setForm] = useState({ title: '', projectId: '', amount: '', type: 'Material' as Expense['type'] });
+
+  const projects = getProjects();
+  const refresh = () => setExpenses(getExpenses());
+
+  // Compute live totals
+  const totalBudget = projects.reduce((s, p) => s + p.budget, 0);
+  const totalSpent = expenses.reduce((s, e) => s + e.amount, 0);
+  const remaining = totalBudget - totalSpent;
+  const percentSpent = totalBudget > 0 ? Math.round((totalSpent / totalBudget) * 100) : 0;
+
+  const visibleExpenses = showAll ? expenses : expenses.slice(0, 6);
+
+  const formatDate = (d: string) => {
+    const date = new Date(d);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffDays = Math.floor(diffMs / 86400000);
+    if (diffDays === 0) return `Today, ${date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`;
+    if (diffDays === 1) return 'Yesterday';
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  const handleSubmit = () => {
+    if (!form.title.trim() || !form.amount) {
+      showToast('Title and amount are required.', 'error');
+      return;
+    }
+    const project = projects.find(p => p.id === form.projectId);
+    addExpense({
+      title: form.title,
+      projectId: form.projectId,
+      projectName: project?.name || 'General',
+      amount: Number(form.amount),
+      date: new Date().toISOString(),
+      type: form.type,
+    });
+    showToast(`Expense of $${Number(form.amount).toFixed(2)} logged.`);
+    setForm({ title: '', projectId: '', amount: '', type: 'Material' });
+    setIsModalOpen(false);
+    refresh();
+  };
+
+  const handleDelete = (exp: typeof expenses[0]) => {
+    if (confirm(`Delete "${exp.title}"?`)) {
+      deleteExpense(exp.id);
+      showToast('Expense deleted.', 'info');
+      refresh();
+    }
+  };
 
   return (
     <div className="budget-wrapper animate-fade-in">
@@ -33,9 +86,9 @@ export default function Budget() {
              <div className="meta-label text-white/80">Total Budget (Active)</div>
              <Receipt size={24} className="text-white/60" />
           </div>
-          <div className="text-4xl font-bold mb-2">$3.93M</div>
+          <div className="text-4xl font-bold mb-2">{formatCurrency(totalBudget)}</div>
           <div className="pill bg-white/20 text-white w-fit">
-            Across 4 Projects
+            Across {projects.length} Project{projects.length !== 1 ? 's' : ''}
           </div>
         </div>
 
@@ -44,9 +97,9 @@ export default function Budget() {
              <div className="meta-label">Total Spent</div>
              <TrendingDown size={24} className="text-danger" />
           </div>
-          <div className="text-4xl font-bold mb-2">$1.85M</div>
-          <div className="pill success w-fit">
-            ↓ 4.2% Under Estimate
+          <div className="text-4xl font-bold mb-2">{formatCurrency(totalSpent)}</div>
+          <div className={`pill ${percentSpent <= 50 ? 'success' : percentSpent <= 80 ? 'warning' : 'danger'} w-fit`}>
+            {percentSpent <= 50 ? '↓' : '↑'} {percentSpent}% of Budget
           </div>
         </div>
 
@@ -54,12 +107,12 @@ export default function Budget() {
           <div className="flex justify-between items-start mb-6">
              <div className="meta-label">Remaining to Complete</div>
           </div>
-          <div className="text-4xl font-bold mb-2 text-brand">$2.08M</div>
+          <div className="text-4xl font-bold mb-2 text-brand">{formatCurrency(Math.max(0, remaining))}</div>
           <div className="progress-bar-container mt-4">
-            <div className="progress-bar-fill" style={{ width: '47%', backgroundColor: 'var(--brand-primary)' }}></div>
+            <div className="progress-bar-fill" style={{ width: `${percentSpent}%`, backgroundColor: 'var(--brand-primary)' }}></div>
           </div>
           <div className="flex justify-between text-sm text-secondary mt-2">
-            <span>47% Spent</span>
+            <span>{percentSpent}% Spent</span>
             <span>100%</span>
           </div>
         </div>
@@ -69,11 +122,16 @@ export default function Budget() {
       <div className="card list-card p-0">
         <div className="p-6 border-b border-color flex justify-between items-center">
            <h3 className="card-title">Recent Transactions</h3>
-           <button className="btn-icon bg-bg-tertiary">View All</button>
+           <button className="btn-icon bg-bg-tertiary" onClick={() => setShowAll(!showAll)}>
+             {showAll ? 'Show Less' : `View All (${expenses.length})`}
+           </button>
         </div>
 
         <div className="transaction-list">
-          {EXPENSES.map(exp => (
+          {visibleExpenses.length === 0 && (
+            <div className="p-8 text-center text-secondary">No expenses logged yet. Click "Log Expense" to add one.</div>
+          )}
+          {visibleExpenses.map(exp => (
             <div key={exp.id} className="transaction-item">
                <div className="flex items-center gap-4">
                  <div className="icon-circle bg-bg-secondary">
@@ -82,16 +140,19 @@ export default function Budget() {
                  <div>
                    <div className="font-semibold mb-1">{exp.title}</div>
                    <div className="text-sm text-secondary flex items-center gap-2">
-                     <span className="truncate max-w-[150px] inline-block">{exp.project}</span> • <span>{exp.date}</span>
+                     <span className="truncate max-w-[150px] inline-block">{exp.projectName}</span> • <span>{formatDate(exp.date)}</span>
                    </div>
                  </div>
                </div>
                
-               <div className="text-right flex items-center gap-6">
+               <div className="text-right flex items-center gap-4">
                   <div className="mobile-hide">
                     <span className="pill bg-bg-tertiary text-text-secondary font-medium">{exp.type}</span>
                   </div>
-                  <div className="font-bold text-[16px]">{exp.amount}</div>
+                  <div className="font-bold text-[16px]">${exp.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
+                  <button className="btn-icon bg-transparent border-none text-secondary hover:text-danger" onClick={() => handleDelete(exp)}>
+                    <Trash2 size={16} />
+                  </button>
                </div>
             </div>
           ))}
@@ -105,29 +166,36 @@ export default function Budget() {
          </button>
       </div>
 
-      {/* Expense Capture Modal */}
-      {isModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
-           <div className="modal-content card animate-fade-in" onClick={e => e.stopPropagation()}>
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="card-title">Quick Scanner</h3>
-                <button className="btn-icon bg-transparent border-none" onClick={() => setIsModalOpen(false)}>
-                  <X size={20} />
-                </button>
-              </div>
-              <div className="camera-viewfinder border-dashed border-2 border-brand mb-6 flex flex-col items-center justify-center p-8 bg-brand-tertiary rounded-2xl cursor-pointer hover:bg-brand/20 transition-colors">
-                 <Camera size={48} className="text-brand mb-4" />
-                 <span className="font-bold text-brand mb-1">Tap to Scan Receipt</span>
-                 <span className="text-sm text-brand/70 text-center">AI runs OCR to auto-extract amount, vendor, and project matching.</span>
-              </div>
-              <div className="log-input-group mb-6">
-                 <label>Manual Entry Alternative</label>
-                 <input type="text" placeholder="$0.00" className="text-2xl font-bold" />
-              </div>
-              <button className="btn btn-primary w-full justify-center" onClick={() => setIsModalOpen(false)}>Save Expense</button>
-           </div>
+      {/* Expense Modal */}
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Log Expense">
+        <div className="form-group">
+          <label>Expense Title *</label>
+          <input type="text" value={form.title} onChange={e => setForm(f => ({...f, title: e.target.value}))} placeholder="e.g. Lumber Supply - Home Depot" />
         </div>
-      )}
+        <div className="form-row">
+          <div className="form-group">
+            <label>Amount ($) *</label>
+            <input type="number" step="0.01" value={form.amount} onChange={e => setForm(f => ({...f, amount: e.target.value}))} placeholder="0.00" />
+          </div>
+          <div className="form-group">
+            <label>Type</label>
+            <select value={form.type} onChange={e => setForm(f => ({...f, type: e.target.value as Expense['type']}))}>
+              {EXPENSE_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
+          </div>
+        </div>
+        <div className="form-group">
+          <label>Project</label>
+          <select value={form.projectId} onChange={e => setForm(f => ({...f, projectId: e.target.value}))}>
+            <option value="">General / No Project</option>
+            {projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+          </select>
+        </div>
+        <div className="form-actions">
+          <button className="btn bg-bg-tertiary border border-color" onClick={() => setIsModalOpen(false)}>Cancel</button>
+          <button className="btn btn-primary" onClick={handleSubmit}>Save Expense</button>
+        </div>
+      </Modal>
 
     </div>
   );
