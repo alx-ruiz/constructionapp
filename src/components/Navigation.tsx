@@ -1,5 +1,6 @@
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, FolderKanban, Wallet, CalendarRange, Settings, ClipboardList, Users } from 'lucide-react';
+import { Home, FolderKanban, Wallet, CalendarRange, Settings, ClipboardList, Users, ArrowLeftToLine, ArrowRightToLine } from 'lucide-react';
 import './Navigation.css';
 
 export default function Navigation() {
@@ -13,19 +14,44 @@ export default function Navigation() {
     { name: 'Settings', path: '/settings', icon: Settings, desktopOnly: true },
   ];
 
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    return localStorage.getItem('sidebar-collapsed') === 'true';
+  });
+
+  useEffect(() => {
+    if (isCollapsed) {
+      document.body.classList.add('sidebar-collapsed');
+    } else {
+      document.body.classList.remove('sidebar-collapsed');
+    }
+  }, [isCollapsed]);
+
+  const toggleSidebar = () => {
+    setIsCollapsed(prev => {
+      const newVal = !prev;
+      localStorage.setItem('sidebar-collapsed', String(newVal));
+      return newVal;
+    });
+  };
+
   return (
     <nav className="main-nav">
       <div className="nav-brand desktop-hide-brand">
-        <div className="brand-logo">
-          <div className="brand-icon">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+        {!isCollapsed && (
+          <div className="brand-logo shrink-0">
+            <div className="brand-icon shrink-0">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <span className="brand-text">BuildCommand</span>
           </div>
-          <span className="brand-text">BuildCommand</span>
-        </div>
+        )}
+        <button className="btn-icon collapse-btn border-none hover:bg-bg-tertiary" onClick={toggleSidebar}>
+          {isCollapsed ? <ArrowRightToLine size={18} /> : <ArrowLeftToLine size={18} />}
+        </button>
       </div>
       
       <ul className="nav-list">

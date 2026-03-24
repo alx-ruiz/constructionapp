@@ -6,8 +6,8 @@
   --bg-secondary: #FFFFFF;
   --bg-tertiary: #F1F3F5;
   
-  --text-primary: #1A1D1F;
-  --text-secondary: #6F767E;
+  --text-primary: #111827;
+  --text-secondary: #4B5563; /* Better contrast */
   
   --brand-primary: #FF6A3D; /* Vibrant Orange/Coral */
   --brand-secondary: #FF8A65;
@@ -36,9 +36,14 @@
 
   /* Nav */
   --nav-height: 80px;
+  --nav-width: 280px;
 
   /* Typography */
   --font-family: 'Outfit', sans-serif;
+}
+
+body.sidebar-collapsed {
+  --nav-width: 88px;
 }
 
 [data-theme='dark'] {
@@ -46,8 +51,8 @@
   --bg-secondary: #1A1D1F;
   --bg-tertiary: #272B30;
   
-  --text-primary: #FCFCFD;
-  --text-secondary: #6F767E;
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF; /* Better contrast in dark mode */
   
   --brand-tertiary: rgba(255, 106, 61, 0.15);
   
@@ -117,6 +122,7 @@ a {
 .text-gradient {
   background: linear-gradient(135deg, var(--brand-primary), #FF3D71);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -186,6 +192,8 @@ a {
   .app-container {
     flex-direction: row;
     padding-bottom: 0;
+    padding-left: var(--nav-width);
+    transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 

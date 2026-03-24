@@ -1,4 +1,4 @@
-import { Bell, Search } from 'lucide-react';
+import { Bell, Search, Sparkles } from 'lucide-react';
 import './Header.css';
 
 export default function Header() {
@@ -17,15 +17,17 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="header-actions">
-        <button className="btn-icon header-btn relative">
-          <Bell size={22} />
-          <span className="notification-dot"></span>
-        </button>
-        <button className="btn btn-primary try-ai-btn">
-          ✨ Try AI
-        </button>
-      </div>
+        <div className="header-actions">
+          <button className="btn-icon mobile-hide">
+            <Bell size={18} />
+          </button>
+          
+          <button className="btn btn-primary try-ai-btn" onClick={() => window.dispatchEvent(new Event('toggle-ai-chat'))}>
+            <Sparkles size={16} />
+            <span className="mobile-hide">Try AI</span>
+            <span className="desktop-hide">AI</span>
+          </button>
+        </div>
     </header>
   );
 }
