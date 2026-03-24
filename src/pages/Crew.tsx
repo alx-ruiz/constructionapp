@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Users, Phone, Mail, MessageSquare, Star, ChevronDown, ChevronRight, Plus, Search, Trash2, Edit3, MoreVertical, Building2, DollarSign, StickyNote } from 'lucide-react';
+import { Users, Phone, Mail, MessageSquare, Star, ChevronDown, ChevronRight, Plus, Search, Trash2, Edit3, MoreVertical, DollarSign, StickyNote } from 'lucide-react';
 import Modal from '../components/Modal';
 import { showToast } from '../components/Toast';
 import { getCrew, addCrewMember, updateCrewMember, deleteCrewMember, DEFAULT_TRADES, getCustomTrades, addCustomTrade } from '../data/dataStore';
@@ -50,7 +50,7 @@ export default function Crew() {
       map.set(m.trade, list);
     });
     // Sort: favorites first within each group
-    map.forEach((members, trade) => {
+    map.forEach((members) => {
       members.sort((a, b) => (b.favorite ? 1 : 0) - (a.favorite ? 1 : 0));
     });
     return map;

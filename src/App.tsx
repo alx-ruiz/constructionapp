@@ -8,6 +8,7 @@ import Budget from './pages/Budget';
 import Schedule from './pages/Schedule';
 import DailyLogs from './pages/DailyLogs';
 import ClientPortal from './pages/ClientPortal';
+import Crew from './pages/Crew';
 import Settings from './pages/Settings';
 import AIChat from './components/AIChat';
 import ToastContainer from './components/Toast';
@@ -34,6 +35,7 @@ function App() {
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/logs" element={<DailyLogs />} />
           <Route path="/client" element={<ClientPortal />} />
+          <Route path="/crew" element={<Crew />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
         <AIChat />

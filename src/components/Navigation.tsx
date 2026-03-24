@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, FolderKanban, Wallet, CalendarRange, Settings, ClipboardList, Users, ArrowLeftToLine, ArrowRightToLine } from 'lucide-react';
+import { Home, FolderKanban, Wallet, CalendarRange, Settings, ClipboardList, Users, HardHat, ArrowLeftToLine, ArrowRightToLine } from 'lucide-react';
 import './Navigation.css';
 
 export default function Navigation() {
@@ -11,6 +11,7 @@ export default function Navigation() {
     { name: 'Schedule', path: '/schedule', icon: CalendarRange },
     { name: 'Logs', path: '/logs', icon: ClipboardList },
     { name: 'Client View', path: '/client', icon: Users },
+    { name: 'Crew', path: '/crew', icon: HardHat },
     { name: 'Settings', path: '/settings', icon: Settings, desktopOnly: true },
   ];
 
